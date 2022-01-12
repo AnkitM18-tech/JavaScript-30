@@ -44,4 +44,8 @@ body {
     background: black;
     position: absolute;
     top: 50%;
+    transform-origin: 100%; /* to rotate the axis from middle */
+    transform: rotate(90deg); /* to get the hands top to bottom. to negate the offset we need to add 90 in the js script to hands */
+    transition: all 0.05;
+    transition-timing-function: cubic-bezier(0.1,2.7,0.58,1);
 }
