@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>JS Reference VS Copy</title>
+</head>
+
+<body>
+
+    <script>
+        // start with strings, numbers and booleans
+        let age = 100;
+        let age2 = age; // copy
+        console.log(age,age2); // 100 ,100
+        age = 200;
+        console.log(age,age2); // 200, 100
+
+        let name = "ankit";
+        let name2 = name; // copy
+        console.log(name,name2); //ankit ankit
+        name = "ankitmohanty";
+        console.log(name,name2); //ankitmohanty ankit
+        // Let's say we have an array
+        const players = ['Wes', 'Sarah', 'Ryan', 'Poppy'];
+        // and we want to make a copy of it.
+        const team = players; // reference
+        console.log(players,team);//['Wes', 'Sarah', 'Ryan', 'Poppy'] ['Wes', 'Sarah', 'Ryan', 'Poppy']
+        // You might think we can just do something like this:
+        // however what happens when we update that array?
+        // now here is the problem!
+        // oh no - we have edited the original array too!
+        // team[3] = "Lisp"; // will go back to original array to make changes, hence the change is reflected in both arrays.
+        // console.log(players,team); //['Wes', 'Sarah', 'Ryan', 'Lisp'] ['Wes', 'Sarah', 'Ryan', 'Lisp']
+        // Why? It's because that is an array reference, not an array copy. They both point to the same array!
+        // So, how do we fix this? We take a copy instead!
+        // one way
+        const team2 = players.slice(); // copy
+        team2[3] = "Lisp";
+        console.log(players, team2);// ['Wes', 'Sarah', 'Ryan', 'Poppy'] ['Wes', 'Sarah', 'Ryan', 'Lisp']
+        // or create a new array and concat the old one in
+        const team3 = [].concat(players); // copy
+        team3[3] = "Lisp";
+        console.log(players,team3);// ['Wes', 'Sarah', 'Ryan', 'Poppy'] ['Wes', 'Sarah', 'Ryan', 'Lisp']
+        // or use the new ES6 Spread
+        const team4 = [...players]; // copy
+        team4[3] = "Lisp";
+        console.log(players,team4);// ['Wes', 'Sarah', 'Ryan', 'Poppy'] ['Wes', 'Sarah', 'Ryan', 'Lisp']
+        const team5 = Array.from(players); // copy
+        team5[3] = "Logo";
+        console.log(players, team5); //['Wes', 'Sarah', 'Ryan', 'Poppy'] ['Wes', 'Sarah', 'Ryan', 'Logo']
+        // now when we update it, the original one isn't changed
+        // The same thing goes for objects, let's say we have a person object
+        // with Objects
+        const person = {
+            name: 'Ankit M',
+            age: 80
+        };
+        // and think we make a copy:
+        // const captain = person; // reference
+        // captain.number = 99;
+        // console.log(person,captain);//{name: 'Ankit M', age: 80, number: 99} {name: 'Ankit M', age: 80, number: 99}
+        // how do we take a copy instead?
+        const cap2 = Object.assign({}, person, { number : 99}); // copy
+        // We will hopefully soon see the object ...spread
+        const cap3 = {...person};
+        console.log(cap3); //{name: 'Ankit M', age: 80}
+        // Things to note - this is only 1 level deep - both for Arrays and Objects. lodash has a cloneDeep method, but you should think twice before using it.
+        const ankit = {
+            name: "Ankit",
+            age: 21,
+            social: {
+                twitter: "@ankit",
+                insta: "ankit18"
+            }
+        }
+        console.log(ankit);
+        // {name: 'Ankit', age: 21, social: {…}}
+        // age: 21
+        // name: "Ankit"
+        // social: {twitter: '@ankit', insta: 'ankit18'}
+        const dev = Object.assign({}, ankit);
+        // dev.social.twitter = "cool@"; // will also change original object's social, cause it will only go 1 level deep.
+        // console.log(dev, ankit);
+        const dev2 = JSON.parse(JSON.stringify(ankit)); // it will change object to string using stringify ,then parse it back to object and now we can change the deep level attribute/ property without changing original object
+        dev2.social.twitter = "tweet@";
+        console.log(ankit.social); // {twitter: '@ankit', insta: 'ankit18'}
+        console.log(dev2.social); // {twitter: 'tweet@', insta: 'ankit18'}
+    </script>
+
+</body>
+
+</html>
