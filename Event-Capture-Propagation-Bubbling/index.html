@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Understanding JavaScript's Capture</title>
+</head>
+
+<body class="bod">
+
+    <div class="one">
+        <div class="two">
+            <div class="three">
+            </div>
+        </div>
+    </div>
+
+    <style>
+        html {
+            box-sizing: border-box;
+        }
+
+        *,
+        *:before,
+        *:after {
+            box-sizing: inherit;
+        }
+
+        div {
+            width: 100%;
+            padding: 100px;
+        }
+
+        .one {
+            background: thistle;
+        }
+
+        .two {
+            background: mistyrose;
+        }
+
+        .three {
+            background: coral;
+        }
+    </style>
+
+    <button></button>
+    <!-- capture top to down and bubbling down to top in case of nested element listeners -->
+    <script>
+        const divs = document.querySelectorAll("div");
+        // if you click any nested element it will capture elements top to down and while returning it bubbles up(triggering events) to the parent.
+        const button = document.querySelector("button");
+        function logText(e){
+            console.log(this.classList.value);
+            e.stopPropagation();// stop bubbling events
+            // console.log(this);
+        }
+
+        divs.forEach( div => div.addEventListener("click",logText, {
+            capture: false, // capture: true will make capture go from top to bottom. false will make it go down to top
+            // once: true // it will listen once then unbind itself -> works like removeEventListener()
+        }));
+
+        button.addEventListener("click", () => {
+            console.log("Click!!");
+        }, {
+            once: true
+        });
+    </script>
+</body>
+
+</html>
